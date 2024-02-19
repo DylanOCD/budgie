@@ -1,0 +1,45 @@
+#
+# Copyright (c) 2024 Dylan O' Connor Desmond
+#
+
+version: '3.8'
+
+volumes:
+  postgres_db:
+    driver: local
+
+secrets:
+  databasePassword:
+    file: secrets/databasePassword.txt
+
+services:
+  db:
+    image: postgres:16.1
+    restart: always
+    container_name: database
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/databasePassword
+    secrets:
+      - databasePassword
+
+  budgie:
+    image: budgie-api:dev
+    restart: always
+    container_name: budgie-api
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_PASSWORD_FILE=/run/secrets/databasePassword
+      - GIN_MODE=release
+      - DATABASE_USER=postgres
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+    secrets:
+      - databasePassword

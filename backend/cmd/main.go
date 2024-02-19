@@ -6,30 +6,40 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"log"
 
+	"github.com/DylanOCD/budgie/backend/config"
+	"github.com/DylanOCD/budgie/backend/pkg/database"
+	"github.com/DylanOCD/budgie/backend/pkg/handlers"
+	"github.com/DylanOCD/budgie/backend/pkg/repository"
+	"github.com/DylanOCD/budgie/backend/pkg/routes"
+	"github.com/DylanOCD/budgie/backend/rootdir"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func setupRouter() *gin.Engine {
-	// Disable console color
-	// gin.DisableConsoleColor()
-	r := gin.Default()
+func setupRouter(db *gorm.DB, handler handlers.Handler) *gin.Engine {
+	router := gin.Default()
+	routes.AddRoutes(router, handler)
 
-	// Ping test
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	return r
+	return router
 }
 
 func main() {
-	r := setupRouter()
-	// Listen and Server in 0.0.0.0:8080
-	err := r.Run(":8080")
-
+	conf, err := config.Load(rootdir.Root + "/config")
 	if err != nil {
-		fmt.Printf("Error starting server: %v", err)
+		message := fmt.Sprintf("Failed to load conf: %v", err)
+		log.Fatal(message)
+	}
+
+	db := database.Connect(conf)
+	r := repository.New(db)
+	handler := handlers.New(&r, &conf)
+	router := setupRouter(db, handler)
+
+	// Listen and Server in 0.0.0.0:8080
+	err = router.Run(":8080")
+	if err != nil {
+		fmt.Printf("Error starting router: %v", err)
 	}
 }

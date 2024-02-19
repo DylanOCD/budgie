@@ -1,0 +1,9 @@
+*.go
+*.md
+*.env
+*.sum
+*.mod
+*.yaml
+*.yml
+Dockerfile*
+Makefile*
