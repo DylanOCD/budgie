@@ -7,8 +7,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/DylanOCD/budgie/backend/config"
-	"github.com/DylanOCD/budgie/backend/pkg/repository"
+	"github.com/DylanOCD/budgie/backend/internal/config"
+	"github.com/DylanOCD/budgie/backend/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 

@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/DylanOCD/budgie/backend/config"
-	"github.com/DylanOCD/budgie/backend/pkg/models"
+	"github.com/DylanOCD/budgie/backend/internal/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

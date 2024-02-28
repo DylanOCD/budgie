@@ -11,12 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (handler Handler) GetExpenses(context *gin.Context) {
+func (handler Handler) GetExpenses(c *gin.Context) {
 	expenses, err := handler.repository.GetExpenses()
 	if err != nil {
 		message := fmt.Sprintf("Failed to get expenses: %v", err)
-		context.IndentedJSON(http.StatusBadRequest, gin.H{"message": message})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": message})
 		return
 	}
-	context.IndentedJSON(http.StatusOK, expenses)
+	c.IndentedJSON(http.StatusOK, expenses)
 }

@@ -2,13 +2,18 @@
 # Copyright (c) 2024 Dylan O' Connor Desmond
 #
 
-.PHONY: lint build up down
+.PHONY: lint build test up down
 
 IMAGE_NAME		?= budgie-api
 IMAGE_TAG		?= dev
 HADOLINT_IMAGE	?= hadolint/hadolint:latest
 GOLANG_IMAGE	?= golang:1.22.0
-WORKDIR			?= "$(shell cygpath -w $$(pwd))"
+
+ifeq ($(OS), Windows_NT)
+	WORKDIR	?= "$(shell cygpath -w $$(pwd))"
+else
+	WORKDIR ?= `pwd`
+endif
 
 lint:
 	@docker \
@@ -23,6 +28,12 @@ build:
 		build \
 		--tag $(IMAGE_NAME):$(IMAGE_TAG) \
 		.
+
+test:
+	@go \
+		test \
+		-count=1 \
+		./...
 
 up:
 	@docker \

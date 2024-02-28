@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DylanOCD/budgie/backend/pkg/models"
+	"github.com/DylanOCD/budgie/backend/internal/models"
 	"gorm.io/gorm"
 )
 

@@ -7,3 +7,5 @@
 *.yml
 Dockerfile*
 Makefile*
+go.mod
+go.sum

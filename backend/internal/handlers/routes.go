@@ -2,14 +2,13 @@
  * Copyright (c) 2024 Dylan O' Connor Desmond
  */
 
-package routes
+package handlers
 
 import (
-	"github.com/DylanOCD/budgie/backend/pkg/handlers"
 	"github.com/gin-gonic/gin"
 )
 
-func AddRoutes(router *gin.Engine, handler handlers.Handler) {
+func AddRoutes(router *gin.Engine, handler Handler) {
 	v1 := router.Group("budgie/v1")
 	{
 		// Ping
